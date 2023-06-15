@@ -2,9 +2,14 @@ import Vue from "vue";
 import App from "./App.vue";
 import VueAxios from "vue-axios";
 import axios from "axios";
+axios.defaults.withCredentials = true;
+
+import '@fortawesome/fontawesome-free/css/all.css';
 
 import routes from "./routes";
 import VueRouter from "vue-router";
+import store from "./store";
+import consts from "./consts";
 Vue.use(VueRouter);
 const router = new VueRouter({
   routes,
@@ -23,7 +28,7 @@ import {
   FormSelectPlugin,
   AlertPlugin,
   ToastPlugin,
-  LayoutPlugin,
+  LayoutPlugin
 } from "bootstrap-vue";
 [
   FormGroupPlugin,
@@ -35,16 +40,16 @@ import {
   FormSelectPlugin,
   AlertPlugin,
   ToastPlugin,
-  LayoutPlugin,
+  LayoutPlugin
 ].forEach((x) => Vue.use(x));
 Vue.use(Vuelidate);
 
 axios.interceptors.request.use(
-  function(config) {
+  function (config) {
     // Do something before request is sent
     return config;
   },
-  function(error) {
+  function (error) {
     // Do something with request error
     return Promise.reject(error);
   }
@@ -52,11 +57,11 @@ axios.interceptors.request.use(
 
 // Add a response interceptor
 axios.interceptors.response.use(
-  function(response) {
+  function (response) {
     // Do something with response data
     return response;
   },
-  function(error) {
+  function (error) {
     // Do something with response error
     return Promise.reject(error);
   }
@@ -68,6 +73,8 @@ Vue.config.productionTip = false;
 
 const shared_data = {
   username: localStorage.username,
+  server_domain: store.server_domain,
+  consts: consts,
   login(username) {
     localStorage.setItem("username", username);
     this.username = username;
@@ -77,9 +84,10 @@ const shared_data = {
     console.log("logout");
     localStorage.removeItem("username");
     this.username = undefined;
+    this.$router.push("/");
   },
 };
-console.log(shared_data);
+// console.log(shared_data);
 // Vue.prototype.$root.store = shared_data;
 
 new Vue({
