@@ -1,6 +1,15 @@
 <template>
   <div class="container">
-    <h1>Four Oh Four you didn't</h1>
-    <router-link to="/" exact>ET Go Home</router-link>
+    <h1>Page Not Found</h1>
+    <router-link to="/" exact><b-button variant="danger">Home</b-button></router-link>
   </div>
 </template>
+
+<style scoped>
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 80vh;
+  }
+</style>

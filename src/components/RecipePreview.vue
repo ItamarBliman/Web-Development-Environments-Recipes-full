@@ -1,141 +1,215 @@
 <template>
   <router-link
-    :to="{ name: 'recipe', params: { recipeId: recipe.id } }"
-    class="recipe-preview"
+    :to="{ name: 'recipe', params: { recipeId: recipe.id || `-` + recipe.recipe_id } }"
+    class="recipe-previe"
   >
-    <div class="recipe-body">
-      <img v-if="image_load" :src="recipe.image" class="recipe-image" />
-    </div>
-    <div class="recipe-footer">
-      <div :title="recipe.title" class="recipe-title">
-        {{ recipe.title }}
+    <div class="recipe-card">
+      <div class="image-container">
+        <img :src="recipe.image" class="recipe-image" />
       </div>
-      <ul class="recipe-overview">
-        <li>{{ recipe.readyInMinutes }} minutes</li>
-        <li>{{ recipe.aggregateLikes }} likes</li>
-      </ul>
+      <div class="recipe-details">
+        <h2 class="recipe-title">{{ recipe.title }}</h2>
+        <div class="details-row">
+          <div class="detail-item">
+            <i class="fas fa-clock" title="Time"></i>
+            {{ recipe.readyInMinutes }} minutes
+          </div>
+          <div class="detail-item">
+            <i class="fas fa-thumbs-up" title="Likes"></i>
+            {{ recipe.aggregateLikes }}
+          </div>
+          <div class="detail-item">
+            <i
+              class="fas fa-seedling"
+              title="Vegan"
+              style="
+                --fa-primary-color: #669c35;
+                --fa-secondary-color: #669c35;
+                --fa-secondary-opacity: 0.7;
+              "
+              v-if="recipe.vegan"
+            ></i>
+            <i
+              class="fas fa-leaf"
+              title="Vegetarian"
+              style="
+                --fa-primary-color: #077e1b;
+                --fa-primary-opacity: 1;
+                --fa-secondary-color: #06c11c;
+                --fa-secondary-opacity: 0.7;
+              "
+              v-if="recipe.vegetarian"
+            ></i>
+            <i
+              class="fas fa-wheat-awn"
+              title="Gluten Free"
+              style="
+                --fa-primary-color: #a96800;
+                --fa-secondary-color: #aa7942;
+                --fa-secondary-opacity: 0.6;
+              "
+              v-if="recipe.glutenFree"
+            ></i>
+          </div>
+          <div class="detail-item" v-if="this.$root.store.username && recipe.id">
+            <button
+              class="favorite-button"
+              :class="{ favorite: recipe.favorite }"
+              @click.prevent="toggleFavorite(recipe)"
+            >
+              <i class="fas fa-star" title="Favorite"></i>
+            </button>
+            <i class="fas fa-eye" title="Watched" v-if="recipe.watched"></i>
+          </div>
+        </div>
+      </div>
     </div>
   </router-link>
 </template>
 
 <script>
+import debounce from "lodash/debounce";
+
 export default {
-  mounted() {
-    this.axios.get(this.recipe.image).then((i) => {
-      this.image_load = true;
-    });
-  },
-  data() {
-    return {
-      image_load: false
-    };
-  },
   props: {
     recipe: {
       type: Object,
-      required: true
-    }
-
-    // id: {
-    //   type: Number,
-    //   required: true
-    // },
-    // title: {
-    //   type: String,
-    //   required: true
-    // },
-    // readyInMinutes: {
-    //   type: Number,
-    //   required: true
-    // },
-    // image: {
-    //   type: String,
-    //   required: true
-    // },
-    // aggregateLikes: {
-    //   type: Number,
-    //   required: false,
-    //   default() {
-    //     return undefined;
-    //   }
-    // }
+      required: true,
+    },
+  },
+  methods: {
+    toggleFavorite: debounce(function (recipe) {
+      if (!this.$root.store.username) {
+        this.$root.toast("Login", "Please login to see your favorite recipes", "warning");
+        return;
+      }
+      if (recipe.favorite) {
+        this.axios
+          .delete(
+            this.$root.store.server_domain + `/users/favorites/${recipe.id}`
+          )
+          .then(() => {
+            recipe.favorite = false;
+          });
+      } else {
+        this.axios
+          .post(this.$root.store.server_domain + `/users/favorites`, {
+            recipe_id: recipe.id,
+          })
+          .then(() => {
+            recipe.favorite = true;
+          });
+      }
+    }, 500),
   }
 };
 </script>
-
+  
 <style scoped>
-.recipe-preview {
-  display: inline-block;
-  width: 90%;
-  height: 100%;
-  position: relative;
-  margin: 10px 10px;
+.recipe-card {
+  background-color: blanchedalmond;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 350px;
+  width: 300px;
+  transition: background-color 0.2s;
+  color: rgb(202, 8, 8);
 }
-.recipe-preview > .recipe-body {
+
+.recipe-card:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.image-container {
   width: 100%;
   height: 200px;
-  position: relative;
-}
-
-.recipe-preview .recipe-body .recipe-image {
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: auto;
-  margin-bottom: auto;
-  display: block;
-  width: 98%;
-  height: auto;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  background-size: cover;
-}
-
-.recipe-preview .recipe-footer {
-  width: 100%;
-  height: 50%;
   overflow: hidden;
+  border-radius: 8px;
+  margin-bottom: 16px;
 }
 
-.recipe-preview .recipe-footer .recipe-title {
-  padding: 10px 10px;
+.recipe-image {
   width: 100%;
-  font-size: 12pt;
-  text-align: left;
-  white-space: nowrap;
-  overflow: hidden;
-  -o-text-overflow: ellipsis;
-  text-overflow: ellipsis;
+  height: 100%;
+  object-fit: cover;
 }
 
-.recipe-preview .recipe-footer ul.recipe-overview {
-  padding: 5px 10px;
-  width: 100%;
-  display: -webkit-box;
-  display: -moz-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-flex: 1;
-  -moz-box-flex: 1;
-  -o-box-flex: 1;
-  box-flex: 1;
-  -webkit-flex: 1 auto;
-  -ms-flex: 1 auto;
-  flex: 1 auto;
-  table-layout: fixed;
-  margin-bottom: 0px;
-}
-
-.recipe-preview .recipe-footer ul.recipe-overview li {
-  -webkit-box-flex: 1;
-  -moz-box-flex: 1;
-  -o-box-flex: 1;
-  -ms-box-flex: 1;
-  box-flex: 1;
-  -webkit-flex-grow: 1;
-  flex-grow: 1;
-  width: 90px;
-  display: table-cell;
+.recipe-details {
   text-align: center;
+}
+
+.recipe-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  transition: color 0.2s;
+}
+
+.details-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  margin-right: 8px;
+  font-size: 14px;
+}
+
+.favorite {
+  color: gold;
+}
+
+.fa-eye {
+  margin-left: 8px;
+  color: green;
+}
+
+.fa-star {
+  font-size: 16px;
+}
+
+.fa-seedling,
+.fa-leaf,
+.fa-bread-slice {
+  font-size: 20px; 
+  margin-right: 4px; 
+}
+
+.recipe-card:hover .recipe-title,
+.recipe-card:hover .detail-item {
+  color: red;
+  text-decoration: none;
+}
+
+.recipe-previe {
+  text-decoration: none; 
+  display: inline-block; 
+}
+
+.favorite-button {
+  background-color: rgb(212, 212, 212);
+  border-radius: 50%;
+  border-color: transparent;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.favorite-button:hover {
+  background-color: rgba(95, 95, 95, 0.5);
+}
+
+.favorite-button:focus {
+  outline: none;
 }
 </style>
