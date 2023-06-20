@@ -68,7 +68,7 @@
 </template>
 
 <script>
-import debounce from "lodash/debounce"; // Import debounce function from Lodash or use your custom debounce implementation
+import debounce from "lodash/debounce";
 
 export default {
   props: {
@@ -80,11 +80,7 @@ export default {
   methods: {
     toggleFavorite: debounce(function (recipe) {
       if (!this.$root.store.username) {
-        this.$root.$bvToast.toast("Please login to see your favorite recipes", {
-          title: "Login",
-          variant: "warning",
-          solid: true,
-        });
+        this.$root.toast("Login", "Please login to see your favorite recipes", "warning");
         return;
       }
       if (recipe.favorite) {
@@ -105,17 +101,7 @@ export default {
           });
       }
     }, 500),
-  },
-  mounted() {
-    // this.axios.get(this.recipe.image, { withCredentials: false }).then(() => {
-    //   this.image_load = true;
-    // });
-  },
-  data() {
-    return {
-      // image_load: false,
-    };
-  },
+  }
 };
 </script>
   
@@ -130,7 +116,7 @@ export default {
   align-items: center;
   justify-content: center;
   height: 350px;
-  width: 300px; /* Set the desired width for the recipe card */
+  width: 300px;
   transition: background-color 0.2s;
   color: rgb(202, 8, 8);
 }
@@ -193,19 +179,19 @@ export default {
 .fa-seedling,
 .fa-leaf,
 .fa-bread-slice {
-  font-size: 20px; /* Adjust the icon size as needed */
-  margin-right: 4px; /* Add spacing between icons */
+  font-size: 20px; 
+  margin-right: 4px; 
 }
 
 .recipe-card:hover .recipe-title,
 .recipe-card:hover .detail-item {
   color: red;
-  text-decoration: none; /* Remove text underline on hover */
+  text-decoration: none;
 }
 
 .recipe-previe {
-  text-decoration: none; /* Remove text underline */
-  display: inline-block; /* Remove the default block display */
+  text-decoration: none; 
+  display: inline-block; 
 }
 
 .favorite-button {
@@ -216,7 +202,7 @@ export default {
   height: 30px;
   padding: 0;
   cursor: pointer;
-  transition: color 0.2s; /* Add transition effect */
+  transition: color 0.2s;
 }
 
 .favorite-button:hover {

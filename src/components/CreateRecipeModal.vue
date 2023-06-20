@@ -4,20 +4,16 @@
       <div class="modal-content">
         <h2 class="modal-title">Create New Recipe</h2>
         <div class="modal-body">
-          <!-- Your form elements for adding a new recipe -->
-          <!-- Example input field -->
           <label for="recipeTitle">Title</label>
           <input type="text" id="recipeTitle" v-model="newRecipe.title" />
 
           <br />
 
-          <!-- Example input field -->
           <label for="recipeImage">Image</label>
           <input type="text" id="recipeImage" v-model="newRecipe.image" />
 
           <br />
 
-          <!-- Example input field -->
           <label for="recipeReadyInMinutes">Ready in Minutes</label>
           <input
             type="number"
@@ -27,7 +23,6 @@
           />
 
           <br />
-          <!-- Example input field -->
           <label for="recipeServings">Servings</label>
           <input
             type="number"
@@ -38,7 +33,6 @@
 
           <br />
 
-          <!-- Example input field -->
           <label for="recipeAggregateLikes">Aggregate Likes</label>
           <input
             type="number"
@@ -49,7 +43,6 @@
 
           <br />
 
-          <!-- Vegan Toggle -->
           <div class="toggle-option">
             <button
               class="toggle-button"
@@ -61,7 +54,6 @@
             <span class="toggle-label">Vegan</span>
           </div>
 
-          <!-- Vegetarian Toggle -->
           <div class="toggle-option">
             <button
               class="toggle-button"
@@ -73,7 +65,6 @@
             <span class="toggle-label">Vegetarian</span>
           </div>
 
-          <!-- Gluten Free Toggle -->
           <div class="toggle-option">
             <button
               class="toggle-button"
@@ -87,7 +78,6 @@
 
           <br />
 
-          <!-- Ingredients Table -->
           <label for="recipeExtendedIngredients">Ingredients:</label>
           <div class="table-container">
             <table class="ingredient-table">
@@ -137,11 +127,9 @@
 
           <br />
 
-          <!-- Add Step Button -->
           <label for="recipeInstructions">Instructions:</label>
           <br />
 
-          <!-- Instructions Table -->
           <div class="table-container">
             <table class="instruction-table">
               <thead>
@@ -259,12 +247,11 @@ export default {
         })
         .join("\n\n");
 
-      console.log("Saving recipe:", DBrecipe);
       this.axios
         .post(this.$root.store.server_domain + "/users/createdRecipe", DBrecipe)
         .then((response) => {
-          console.log("Recipe saved successfully:", response.data);
           this.cancelAddRecipe();
+          this.$root.toast("Create New Recipe", "New recipe created successfully", "success");
         })
         .catch((error) => {
           console.error("Error saving recipe:", error);
@@ -309,7 +296,6 @@ export default {
 </script>
 
 <style scoped>
-/* Styles for the modal */
 .modal-content {
   background-color: rgba(255, 255, 255, 0.9);
   border-radius: 0.75rem;
@@ -373,19 +359,6 @@ export default {
 
 .add-row:hover,
 .remove-row:hover {
-  background-color: rgb(233, 150, 7);
-}
-
-.add-recipe-button {
-  padding: 8px 16px;
-  border-radius: 0.25rem;
-  background-color: #c89b3f;
-  color: #ffffff;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.add-recipe-button:hover {
   background-color: rgb(233, 150, 7);
 }
 

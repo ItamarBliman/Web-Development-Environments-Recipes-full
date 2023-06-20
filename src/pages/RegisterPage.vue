@@ -170,10 +170,6 @@
     >
       Register failed: {{ form.submitError }}
     </b-alert>
-    <!-- <b-card class="mt-3 md-3" header="Form Data Result">
-      <pre class="m-0"><strong>form:</strong> {{ form }}</pre>
-      <pre class="m-0"><strong>$v.form:</strong> {{ $v.form }}</pre>
-    </b-card> -->
   </div>
 </template>
 
@@ -226,7 +222,6 @@ export default {
       password: {
         required,
         length: (p) => minLength(5)(p) && maxLength(10)(p),
-        // at least one special character and one number
         strongPassword: (p) =>
           /^(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])(?=.*[0-9]).*$/.test(p),
       },
@@ -262,6 +257,7 @@ export default {
           }
         );
         this.$router.push("/login");
+        this.$root.toast("Register", "User signed in successfully", "success");
       } catch (err) {
         console.log(err.response);
         this.form.submitError = err.response.data.message;
@@ -272,7 +268,6 @@ export default {
         this.$v.form.$touch();
         return;
       }
-      console.log("register method go");
       this.Register();
     },
     onReset() {

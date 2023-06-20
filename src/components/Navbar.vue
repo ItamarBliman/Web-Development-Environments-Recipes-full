@@ -11,7 +11,6 @@
 
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav>
-          <!-- <b-nav-item href="#">Link</b-nav-item> -->
           <router-link :to="{ name: 'search' }" tag="b-nav-item"
             >Search</router-link
           >
@@ -20,7 +19,6 @@
           >
         </b-navbar-nav>
 
-        <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto" v-if="!$root.store.username" right>
           <b-button variant="danger" disabled>hello guest</b-button>
           <router-link :to="{ name: 'login' }" tag="b-nav-item"
@@ -35,7 +33,6 @@
             $root.store.username
           }}</b-button>
           <b-nav-item-dropdown>
-            <!-- Using 'button-content' slot -->
             <template #button-content>
               <em>Personal</em>
             </template>
@@ -60,7 +57,7 @@
             @click="
               () => {
                 logout();
-                this.$router.push('/');
+                // this.$router.push('/');
               }
             "
             variant="outline-light"
@@ -75,19 +72,13 @@
 <script>
 export default {
   name: "Navbar",
-  // props: {
-  //   showModal: {
-  //     type: Boolean,
-  //     required: true,
-  //   },
-  // },
   methods: {
     async logout() {
       try {
         const response = await this.axios.post(
           this.$root.store.server_domain + "/Logout"
         );
-        this.$root.store.logout();
+        this.$emit('Logout');
       } catch (err) {
         console.log(err.response);
       }

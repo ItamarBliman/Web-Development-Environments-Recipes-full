@@ -82,12 +82,6 @@ export default {
   },
 };
 </script>
-  
-  <style lang="scss" scoped>
-.container {
-  min-height: 400px;
-}
-</style>
 
 <style scoped>
 .recipe-card {
@@ -149,28 +143,5 @@ export default {
   cursor: pointer;
 }
 
-.favorite-button:focus {
-  outline: none;
-}
-
-.favorite {
-  color: gold;
-}
-
-.fa-eye {
-  margin-left: 8px;
-  color: green;
-}
-
-.fa-star {
-  font-size: 16px;
-}
-
-.fa-seedling,
-.fa-leaf,
-.fa-bread-slice {
-  font-size: 20px; /* Adjust the icon size as needed */
-  margin-right: 4px; /* Add spacing between icons */
-}
 </style>
   

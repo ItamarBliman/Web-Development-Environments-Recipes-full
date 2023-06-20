@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Navbar v-on:inputChange="handleChange" />
+    <Navbar v-on:inputChange="handleChange" v-on:Logout="Logout" />
     <CreateRecipeModal
       :showModal="showModal"
       v-on:inputChange="handleChange"
@@ -30,10 +30,10 @@ export default {
     },
     Logout() {
       this.$root.store.logout();
-      this.$root.toast("Logout", "User logged out successfully", "success");
       this.$router.push("/").catch(() => {
         this.$forceUpdate();
       });
+      this.$root.toast("Logout", "User logged out successfully", "success");
     },
   },
   components: { Navbar, CreateRecipeModal, Footer },
@@ -73,7 +73,6 @@ h4 {
   font-weight: 70;
   color: #2c3e50;
   padding: 20px;
-  // text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 </style>

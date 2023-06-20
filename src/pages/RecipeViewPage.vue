@@ -94,21 +94,18 @@
               >
                 {{ i }}
               </b-row>
-              <!-- <Instructions :instructions="recipe.instructions" /> -->
             </div>
           </div>
         </div>
       </div>
     </div>
-    <!-- </div> -->
   </div>
 </template>
 
 
 <script>
-import debounce from "lodash/debounce"; // Import debounce function from Lodash or use your custom debounce implementation
+import debounce from "lodash/debounce";
 import Ingredients from "../components/Ingredients.vue";
-import Instructions from "../components/Instructions.vue";
 export default {
   components: { Ingredients },
   data() {
@@ -129,7 +126,7 @@ export default {
 
         if (response.status !== 200) this.$router.replace("/NotFound");
       } catch (error) {
-        console.log("error.response.status", error.response.status);
+        console.log("error.response.status ", error.response.status);
         this.$router.replace("/NotFound");
         return;
       }
@@ -150,19 +147,7 @@ export default {
         watched,
       } = response.data;
 
-      console.log("instructions", instructions);
-      console.log(response.data);
-
       if (Array.isArray(instructions)) {
-        // console.log("instructions", instructions);
-        // instructions = instructions
-        //   .map((fstep) => {
-        //     fstep.steps[0].step = fstep.name + fstep.steps[0].step;
-        //     return fstep.steps;
-        //   })
-        //   .map((step) => step.map((s) => s.step));
-
-        // instructions = instructions[0].steps;
         if (!watched)
         {
           this.axios
@@ -182,8 +167,6 @@ export default {
           .join("\n\n");
         }
       }
-      // .reduce((a, b) => [...a, ...b], []);
-      console.log("instructions", instructions);
 
       let _recipe = {
         id,
@@ -209,11 +192,7 @@ export default {
   methods: {
     toggleFavorite: debounce(function (recipe) {
       if (!this.$root.store.username) {
-        this.$root.$bvToast.toast("Please login to see your favorite recipes", {
-          title: "Login",
-          variant: "warning",
-          solid: true,
-        });
+        this.$root.toast("Login", "Please login to see your favorite recipes", "warning");
         return;
       }
       if (recipe.favorite) {
@@ -270,37 +249,21 @@ body {
   margin: 0 auto;
 }
 
-.cards {
-  display: flex;
-  flex-wrap: wrap;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  text-align: center;
-  justify-content: center;
-
-}
-
 .cards_item {
   display: flex;
   padding: 1rem;
   justify-content: center;
   text-align: center;
-  
 }
 
 .card_image {
   position: relative;
-  /* width: 70%; */
   margin: 20px auto 0 auto;
-  /* max-height: 55%; */
 }
 
 .card_image img {
   border-radius: 0.75rem;
   width: 60%;
-  /* max-height: 800px; */
-
 }
 
 .favorite-button {
@@ -323,29 +286,15 @@ body {
   margin-top: -2px;
 }
 
-.note {
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  padding: 4px 8px;
-  border-radius: 0.25rem;
-  background-color: #c89b3f;
-  font-size: 14px;
-  font-weight: 700;
-  
-}
-
 @media (min-width: 40rem) {
   .cards_item {
     width: 50%;
-    
   }
 }
 
 @media (min-width: 56rem) {
   .cards_item {
     width: 70%;
-    
   }
 }
 
@@ -358,14 +307,12 @@ body {
   position: absolute;
   width: 70%;
   max-height: 85%;
-
 }
 
 .card_content {
   position: relative;
   padding: 16px 12px 32px 24px;
   margin: 16px 8px 8px 0;
-  /* max-height: 300px; */
   overflow-y: scroll;
   overflow-x: hidden;
 
@@ -390,21 +337,8 @@ body {
   margin: 0 0 24px;
   padding-bottom: 10px;
   text-align: center;
-  /* font-size: 20px; */
   font-weight: 700;
 }
-
-/* .card_title::after {
-  position: absolute;
-  display: block;
-  width: 50px;
-  height: 2px;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #c89b3f;
-  content: "";
-} */
 
 hr {
   margin: 24px auto;
@@ -424,7 +358,6 @@ hr {
 
 .icons {
   display: flex;
-  /* justify-content: space-between; */
   justify-content: space-evenly;
   align-items: center;
   margin-bottom: 10px;

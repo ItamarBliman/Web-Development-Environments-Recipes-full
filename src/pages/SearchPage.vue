@@ -103,12 +103,12 @@ export default {
       cuisine = cuisine === "Any" ? undefined : cuisine;
       diet = diet === "Any" ? undefined : diet;
       intolerance = intolerance === "Any" ? undefined : intolerance;
+      searchTerm = searchTerm === "" ? undefined : searchTerm;
 
       if (!this.showSortOptions) {
         sortBy = undefined;
       }
 
-      console.log("Saving search:", this.searchTerm);
       this.axios
         .get(this.$root.store.server_domain + "/recipes/search", {
           params: {
@@ -121,10 +121,12 @@ export default {
           },
         })
         .then((response) => {
-          console.log("Search successfully:", response.data);
           this.searchResults = response.data;
           if (this.$root.store.username){
           this.$root.store.searchResults = response.data;
+          }
+          if (!this.searchResults.length) {
+            this.$root.toast("Search", "No recipes found", "info");
           }
         })
         .catch((error) => {
@@ -145,7 +147,6 @@ export default {
 
 <style scoped>
 .search-container {
-  /* max-width: 400px; */
   width: 80%;
   margin: 0 auto;
 }
@@ -169,22 +170,18 @@ label {
 }
 
 input[type="text"] {
-  /* width: 100%; */
-  /* width: 250px; */
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
 }
 
 .option1 {
-  /* width: 20%; */
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
 }
 
 .option2 {
-  /* width: 8%; */
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -247,10 +244,6 @@ input[type="text"] {
   text-align: center;
 }
 
-.result-container {
-  margin-top: 20px;
-}
-
 ul {
   padding: 0;
   list-style-type: none;
@@ -258,18 +251,6 @@ ul {
 
 li {
   margin-bottom: 5px;
-}
-
-.no-results {
-  margin-top: 20px;
-  text-align: center;
-  color: #888;
-}
-
-.last-search {
-  margin-top: 20px;
-  text-align: center;
-  color: #888;
 }
 
 label {

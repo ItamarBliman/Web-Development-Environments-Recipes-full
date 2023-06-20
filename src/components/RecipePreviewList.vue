@@ -2,7 +2,7 @@
   <b-container>
     <h1>
       {{ title }}:
-      <slot></slot>
+
     </h1>
     <div class="list" v-if="recipes.length">
       <b-row v-for="(row, index) in Math.ceil(recipes.length / 3)" :key="index">
@@ -71,7 +71,6 @@ export default {
         return;
       }
       try {
-        console.log(this.$root.store.server_domain + url);
         const response = await this.axios.get(
           this.$root.store.server_domain + url
         );
@@ -104,9 +103,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.container {
-  min-height: 400px;
-}
+
 .list {
   display: flex;
   flex-direction: column;
