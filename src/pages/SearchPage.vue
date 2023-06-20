@@ -154,19 +154,12 @@ export default {
   text-align: center;
 }
 
-.form-group {
-  /* margin-bottom: 15px; */
-}
-
 .form-group-row {
   display: flex;
   width: 500px;
-  /* flex-wrap: wrap; */
-  /* margin-bottom: 15px; */
 }
 
 .form-group-row .form-group {
-  /* flex-basis: calc(50% - 10px); */
   margin-right: 20px;
 }
 
