@@ -1,12 +1,12 @@
 <template>
   <div>
     {{
-      instructions.length > $root.store.consts.MAX_LENGTH_INSTRUCTIONS && readMore === false
-        ? instructions.substring(0, $root.store.consts.MAX_LENGTH_INSTRUCTIONS) + "..."
+      instructions.length > $root.store.MAX_LENGTH_INSTRUCTIONS && readMore === false
+        ? instructions.substring(0, $root.store.MAX_LENGTH_INSTRUCTIONS) + "..."
         : instructions
     }}
     <b-button
-      v-if="instructions.length > $root.store.consts.MAX_LENGTH_INSTRUCTIONS && !readMore"
+      v-if="instructions.length > $root.store.MAX_LENGTH_INSTRUCTIONS && !readMore"
       size="sm"
       variant="link"
       @click="readMore = !readMore"

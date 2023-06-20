@@ -1,8 +1,11 @@
 <template>
   <div>
     <b-navbar toggleable="lg" type="dark" variant="danger">
-      <router-link :to="{ name: 'main' }" tag="b-navbar-brand"
-        >Vue Recipes</router-link
+      <router-link
+        :to="{ name: 'main' }"
+        tag="b-navbar-brand"
+        style="cursor: pointer"
+        >Home</router-link
       >
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
@@ -37,7 +40,7 @@
               <em>Personal</em>
             </template>
             <router-link :to="{ name: 'myFavorites' }" tag="b-dropdown-item"
-              >My Favorites</router-link
+              >My Favorites <i class="fas fa-star" style="color: gold;"></i></router-link
             >
             <router-link :to="{ name: 'myRecipes' }" tag="b-dropdown-item"
               >My Recipes</router-link
@@ -46,10 +49,23 @@
               >My Family Recipes</router-link
             >
           </b-nav-item-dropdown>
-          <router-link :to="{ name: 'createRecipe' }" tag="b-nav-item"
-            >Create New Recipe</router-link
+          <b-button
+            variant="danger"
+            class="add-recipe-button"
+            @click="() => this.$emit('inputChange', true)"
           >
-          <b-button @click="logout()" variant="outline-light">Logout</b-button>
+            Add New Recipe
+          </b-button>
+          <b-button
+            @click="
+              () => {
+                logout();
+                this.$router.push('/');
+              }
+            "
+            variant="outline-light"
+            >Logout</b-button
+          >
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
@@ -59,6 +75,12 @@
 <script>
 export default {
   name: "Navbar",
+  // props: {
+  //   showModal: {
+  //     type: Boolean,
+  //     required: true,
+  //   },
+  // },
   methods: {
     async logout() {
       try {

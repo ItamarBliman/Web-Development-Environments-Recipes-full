@@ -1,6 +1,6 @@
 <template>
   <b-container>
-    <h1>My Family Recipe</h1>
+    <h1>My Family Recipes</h1>
     <b-row v-if="recipes.length">
       <b-col
         v-for="recipe in recipes"

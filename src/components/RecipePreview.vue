@@ -1,20 +1,22 @@
 <template>
   <router-link
-    :to="{ name: 'recipe', params: { recipeId: recipe.id } }"
+    :to="{ name: 'recipe', params: { recipeId: recipe.id || `-` + recipe.recipe_id } }"
     class="recipe-previe"
   >
     <div class="recipe-card">
       <div class="image-container">
-        <img v-if="image_load" :src="recipe.image" class="recipe-image" />
+        <img :src="recipe.image" class="recipe-image" />
       </div>
       <div class="recipe-details">
         <h2 class="recipe-title">{{ recipe.title }}</h2>
         <div class="details-row">
           <div class="detail-item">
-            <i class="fas fa-clock" title="Time"></i> {{ recipe.readyInMinutes }} minutes
+            <i class="fas fa-clock" title="Time"></i>
+            {{ recipe.readyInMinutes }} minutes
           </div>
           <div class="detail-item">
-            <i class="fas fa-thumbs-up" title="Likes"></i> {{ recipe.aggregateLikes }}
+            <i class="fas fa-thumbs-up" title="Likes"></i>
+            {{ recipe.aggregateLikes }}
           </div>
           <div class="detail-item">
             <i
@@ -49,24 +51,25 @@
               v-if="recipe.glutenFree"
             ></i>
           </div>
-          <div class="detail-item">
+          <div class="detail-item" v-if="this.$root.store.username && recipe.id">
             <button
               class="favorite-button"
               :class="{ favorite: recipe.favorite }"
-              @click="toggleFavorite(recipe)"
+              @click.prevent="toggleFavorite(recipe)"
             >
-              <i class="fas fa-star"></i>
+              <i class="fas fa-star" title="Favorite"></i>
             </button>
-            <i class="fas fa-eye" v-if="recipe.watched"></i>
+            <i class="fas fa-eye" title="Watched" v-if="recipe.watched"></i>
           </div>
         </div>
       </div>
     </div>
   </router-link>
 </template>
-  
-  
-  <script>
+
+<script>
+import debounce from "lodash/debounce"; // Import debounce function from Lodash or use your custom debounce implementation
+
 export default {
   props: {
     recipe: {
@@ -75,18 +78,42 @@ export default {
     },
   },
   methods: {
-    toggleFavorite(recipe) {
-      // Implement the logic to toggle the favorite status of the recipe
-    },
+    toggleFavorite: debounce(function (recipe) {
+      if (!this.$root.store.username) {
+        this.$root.$bvToast.toast("Please login to see your favorite recipes", {
+          title: "Login",
+          variant: "warning",
+          solid: true,
+        });
+        return;
+      }
+      if (recipe.favorite) {
+        this.axios
+          .delete(
+            this.$root.store.server_domain + `/users/favorites/${recipe.id}`
+          )
+          .then(() => {
+            recipe.favorite = false;
+          });
+      } else {
+        this.axios
+          .post(this.$root.store.server_domain + `/users/favorites`, {
+            recipe_id: recipe.id,
+          })
+          .then(() => {
+            recipe.favorite = true;
+          });
+      }
+    }, 500),
   },
   mounted() {
-    this.axios.get(this.recipe.image, { withCredentials: false }).then((i) => {
-      this.image_load = true;
-    });
+    // this.axios.get(this.recipe.image, { withCredentials: false }).then(() => {
+    //   this.image_load = true;
+    // });
   },
   data() {
     return {
-      image_load: false,
+      // image_load: false,
     };
   },
 };
@@ -102,6 +129,7 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  height: 350px;
   width: 300px; /* Set the desired width for the recipe card */
   transition: background-color 0.2s;
   color: rgb(202, 8, 8);
@@ -149,17 +177,6 @@ export default {
   font-size: 14px;
 }
 
-.favorite-button {
-  border: none;
-  background: none;
-  padding: 0;
-  cursor: pointer;
-}
-
-.favorite-button:focus {
-  outline: none;
-}
-
 .favorite {
   color: gold;
 }
@@ -189,5 +206,24 @@ export default {
 .recipe-previe {
   text-decoration: none; /* Remove text underline */
   display: inline-block; /* Remove the default block display */
+}
+
+.favorite-button {
+  background-color: rgb(212, 212, 212);
+  border-radius: 50%;
+  border-color: transparent;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  cursor: pointer;
+  transition: color 0.2s; /* Add transition effect */
+}
+
+.favorite-button:hover {
+  background-color: rgba(95, 95, 95, 0.5);
+}
+
+.favorite-button:focus {
+  outline: none;
 }
 </style>

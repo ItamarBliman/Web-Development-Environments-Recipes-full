@@ -8,7 +8,6 @@ import RecipeView from "./pages/RecipeViewPage";
 import MyFavorites from "./pages/MyFavoritesPage";
 import MyRecipes from "./pages/MyRecipesPage";
 import MyFamilyRecipes from "./pages/MyFamilyRecipesPage";
-import CreateRecipe from "./pages/CreateRecipePage";
 
 
 const routes = [
@@ -51,11 +50,6 @@ const routes = [
     path: "/myFamilyRecipes",
     name: "myFamilyRecipes",
     component: MyFamilyRecipes,
-  },
-  {
-    path: "/createRecipe",
-    name: "createRecipe",
-    component: CreateRecipe,
   },
   {
     path: "/recipe/:recipeId",

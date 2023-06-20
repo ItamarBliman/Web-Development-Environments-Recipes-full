@@ -9,7 +9,6 @@ import '@fortawesome/fontawesome-free/css/all.css';
 import routes from "./routes";
 import VueRouter from "vue-router";
 import store from "./store";
-import consts from "./consts";
 Vue.use(VueRouter);
 const router = new VueRouter({
   routes,
@@ -74,7 +73,8 @@ Vue.config.productionTip = false;
 const shared_data = {
   username: localStorage.username,
   server_domain: store.server_domain,
-  consts: consts,
+  MAX_LENGTH_INSTRUCTIONS: store.MAX_LENGTH_INSTRUCTIONS,
+  searchResults: null,
   login(username) {
     localStorage.setItem("username", username);
     this.username = username;
@@ -84,11 +84,9 @@ const shared_data = {
     console.log("logout");
     localStorage.removeItem("username");
     this.username = undefined;
-    this.$router.push("/");
+    this.searchResults = null;
   },
 };
-// console.log(shared_data);
-// Vue.prototype.$root.store = shared_data;
 
 new Vue({
   router,
