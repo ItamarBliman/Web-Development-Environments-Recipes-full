@@ -2,11 +2,6 @@
 
 This is a repository for assignment 3 of the Web development environments course at the [Ben-Gurion University](https://in.bgu.ac.il/), Israel.
 
-## The Author
-
-Daniel Samira - ID 316164417
-
-Itamar Bliman - ID 312235765
 
 ## Assignment Description
 A passion project of Recipes Website created by Daniel and Itamar - third-year students in the Software and Information Systems Engineering department in BGU.
